@@ -1,13 +1,17 @@
 'use client'
 
-import { useState, useMemo } from "react"
+import { useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"
-import { mckinseyDataViz, mckinseyGrays } from "@/lib/colors/mckinsey-palette"
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart, Cell, LabelList } from "recharts"
+import { mckinseyDataViz } from "@/lib/colors/mckinsey-palette"
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart, LabelList } from "recharts"
+import { useGlobalFilters } from "@/contexts/global-filters-context"
+import { MultiSelectFilter } from "@/components/ui/multi-select-filter"
+import { getFilterOptions } from "@/lib/data/mlr-data"
+
+const filterOptions = getFilterOptions()
 
 // Chart colors - McKinsey palette only
 const COLORS = {
@@ -147,7 +151,17 @@ function generateQuarterlyData() {
 }
 
 export function ConsumerDistribution() {
-  const [selectedYear, setSelectedYear] = useState("2024")
+  const {
+    yearFilter, setYearFilter,
+    availableLobs, availableSublobs,
+    lobFilter, sublobFilter, handleLobChange, handleSublobChange,
+    availableServiceAreas, availableConsumerMarkets, availableConsumerRegions,
+    selectedServiceAreas, setSelectedServiceAreas,
+    selectedConsumerMarkets, setSelectedConsumerMarkets,
+    selectedConsumerRegions, setSelectedConsumerRegions,
+  } = useGlobalFilters()
+
+  const selectedYear = yearFilter === "all" ? "2024" : yearFilter
 
   const distributionData = useMemo(() => generateConsumerDistributionData(parseInt(selectedYear)), [selectedYear])
   const quarterlyData = useMemo(() => generateQuarterlyData(), [])
@@ -417,103 +431,57 @@ export function ConsumerDistribution() {
           </main>
 
           {/* Filter sidebar */}
-          <aside className="w-72 shrink-0 border-l border-border p-4 bg-card">
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-3 border-b border-border pb-2">Global Filters</h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1 block">Year</Label>
-                    <Select value={selectedYear} onValueChange={setSelectedYear}>
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="2022">2022</SelectItem>
-                        <SelectItem value="2023">2023</SelectItem>
-                        <SelectItem value="2024">2024</SelectItem>
-                        <SelectItem value="2025">2025</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1 block">Service area</Label>
-                    <Select defaultValue="all">
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1 block">Consumer-driven market</Label>
-                    <Select defaultValue="all">
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1 block">Consumer-driven region</Label>
-                    <Select defaultValue="all">
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1 block">Attribution Group Flag</Label>
-                    <Select defaultValue="all">
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+          <aside className="w-72 shrink-0 space-y-4 overflow-y-auto p-4">
+            {/* Global Filters */}
+            <Card className="bg-card border-border border-l-4" style={{ borderLeftColor: mckinseyDataViz.coral }}>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-bold" style={{ color: mckinseyDataViz.coral }}>Global Filters</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <label className="text-xs text-muted-foreground block mb-1">Year</label>
+                  <Select value={yearFilter} onValueChange={setYearFilter}>
+                    <SelectTrigger className="h-8 text-sm bg-secondary border-border"><SelectValue placeholder="All" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {filterOptions.years.map(y => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
+                <MultiSelectFilter label="Service area" options={availableServiceAreas} selected={selectedServiceAreas} onChange={setSelectedServiceAreas} placeholder="All" compact />
+                <MultiSelectFilter label="Consumer-driven market" options={availableConsumerMarkets} selected={selectedConsumerMarkets} onChange={setSelectedConsumerMarkets} placeholder="All" compact />
+                <MultiSelectFilter label="Consumer-driven region" options={availableConsumerRegions} selected={selectedConsumerRegions} onChange={setSelectedConsumerRegions} placeholder="All" compact />
+              </CardContent>
+            </Card>
 
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-3 border-b border-border pb-2">Local Filters</h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1 block">LOB</Label>
-                    <Select defaultValue="all">
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="commercial">Commercial</SelectItem>
-                        <SelectItem value="medicaid">Medicaid</SelectItem>
-                        <SelectItem value="medicare">Medicare</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-1 block">Sub LOB</Label>
-                    <Select defaultValue="all">
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+            {/* Local Filters */}
+            <Card className="bg-card border-border border-l-4" style={{ borderLeftColor: mckinseyDataViz.teal }}>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-bold" style={{ color: mckinseyDataViz.teal }}>Local Filters</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <label className="text-xs text-muted-foreground block mb-1">LOB</label>
+                  <Select value={lobFilter} onValueChange={(v) => { handleLobChange(v); handleSublobChange("all") }}>
+                    <SelectTrigger className="h-8 text-sm bg-secondary border-border"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {availableLobs.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
-            </div>
+                <div>
+                  <label className="text-xs text-muted-foreground block mb-1">Sub LOB</label>
+                  <Select value={sublobFilter} onValueChange={handleSublobChange}>
+                    <SelectTrigger className="h-8 text-sm bg-secondary border-border"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {availableSublobs.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
           </aside>
         </div>
       </div>
