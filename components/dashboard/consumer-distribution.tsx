@@ -9,13 +9,13 @@ import { DashboardHeader } from "@/components/dashboard/header"
 import { mckinseyDataViz, mckinseyGrays } from "@/lib/colors/mckinsey-palette"
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart, Cell, LabelList } from "recharts"
 
-// Chart colors
+// Chart colors - McKinsey palette only
 const COLORS = {
-  healthPlanBar: mckinseyDataViz.purple,
-  healthPlanLine: mckinseyDataViz.darkTeal,
-  careDeliveryBar: mckinseyDataViz.purple,
+  healthPlanBar: mckinseyDataViz.brightBlue,
+  healthPlanLine: mckinseyDataViz.teal,
+  careDeliveryBar: mckinseyDataViz.midTeal,
   careDeliveryLine: mckinseyDataViz.darkTeal,
-  headerBg: mckinseyDataViz.darkTeal,
+  headerBg: mckinseyDataViz.teal,
 }
 
 // Format helpers
