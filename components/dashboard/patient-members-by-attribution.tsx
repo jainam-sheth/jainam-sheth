@@ -87,7 +87,7 @@ export function PatientMembersByAttributionDashboard() {
   const rawRows = useMemo(() => getPatientMembersByAttribution(dataFilters), [dataFilters])
 
   const attributionData = useMemo(() => {
-    const groups = ["Provider Group 2 attributed", "Other network attributed", "Unattributed"]
+    const groups = ["University of Pittsburgh Physicians", "UPMC Washington Physicians Group", "Renaissance Family Practice"]
     return groups.map(group => {
       const rows = rawRows.filter(r => r.attributionGroup === group)
       const memberMonths = rows.reduce((s, r) => s + r.memberMonths, 0)
