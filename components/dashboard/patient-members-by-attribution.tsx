@@ -162,13 +162,13 @@ export function PatientMembersByAttributionDashboard() {
 
               {/* Section 2: Plan spend */}
               <div className="border-l border-border px-4 py-3">
-                <h4 className="text-xs font-bold text-foreground leading-tight">Plan spend PMPY at providers versus non-providers ($)</h4>
+                <h4 className="text-xs font-bold text-foreground leading-tight">Plan spend PMPY at UPMC versus non-UPMC providers ($)</h4>
                 <p className="text-[10px] text-muted-foreground mt-0.5">Based on total plan costs and plan payments to providers</p>
                 {/* Section 2 legend */}
                 <div className="flex items-center gap-3 mt-2 flex-wrap">
                   <div className="flex items-center gap-1">
                     <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: COLORS.providerCost }} />
-                    <span className="text-[10px] text-foreground">Plan payments to providers</span>
+                    <span className="text-[10px] text-foreground">Plan payments to UPMC providers</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: COLORS.otherCost }} />
