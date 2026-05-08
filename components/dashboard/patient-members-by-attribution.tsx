@@ -148,102 +148,125 @@ export function PatientMembersByAttributionDashboard() {
 
         {/* Visualization */}
         <Card className="border-border bg-card">
-          <CardContent className="p-6">
-            {/* Three column headers */}
-            <div className="grid grid-cols-[180px_1fr_1fr_1fr] gap-0 mb-2">
+          <CardContent className="p-0">
+            {/* Three column header row with per-section legends */}
+            <div className="grid grid-cols-[200px_1fr_1.6fr_1.6fr] border-b border-border">
+              {/* Row label spacer */}
               <div />
-              <div className="text-center border-l border-border px-2">
-                <h4 className="text-sm font-bold text-foreground">Average monthly members</h4>
-              </div>
-              <div className="text-center border-l border-border px-2">
-                <h4 className="text-sm font-bold text-foreground">Plan spend PMPY at providers versus non-providers ($)</h4>
-                <p className="text-xs text-muted-foreground">Based on total plan costs and plan payments to providers</p>
-              </div>
-              <div className="text-center border-l border-border px-2">
-                <h4 className="text-sm font-bold text-foreground">Integrated total margin per patient-member ($)</h4>
-              </div>
-            </div>
 
-            {/* Legend */}
-            <div className="flex items-center gap-5 mb-4 flex-wrap text-xs pl-[180px]">
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: COLORS.providerCost }} />
-                <span className="text-foreground">Plan payments to providers</span>
+              {/* Section 1: Average monthly members */}
+              <div className="border-l border-border px-4 py-3">
+                <h4 className="text-xs font-bold text-foreground leading-tight">Average monthly members</h4>
+                {/* No legend for this section */}
               </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: COLORS.otherCost }} />
-                <span className="text-foreground">Other plan costs</span>
+
+              {/* Section 2: Plan spend */}
+              <div className="border-l border-border px-4 py-3">
+                <h4 className="text-xs font-bold text-foreground leading-tight">Plan spend PMPY at providers versus non-providers ($)</h4>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Based on total plan costs and plan payments to providers</p>
+                {/* Section 2 legend */}
+                <div className="flex items-center gap-3 mt-2 flex-wrap">
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: COLORS.providerCost }} />
+                    <span className="text-[10px] text-foreground">Plan payments to providers</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: COLORS.otherCost }} />
+                    <span className="text-[10px] text-foreground">Other plan costs</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: COLORS.planMargin }} />
-                <span className="text-foreground">Plan total margin PMPY</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: COLORS.careMargin }} />
-                <span className="text-foreground">Care Delivery total margin per patient</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: COLORS.integrated }} />
-                <span className="text-foreground">Integrated total margin</span>
+
+              {/* Section 3: Integrated margin */}
+              <div className="border-l border-border px-4 py-3">
+                <h4 className="text-xs font-bold text-foreground leading-tight">Integrated total margin per patient-member ($)</h4>
+                {/* Section 3 legend */}
+                <div className="flex items-center gap-3 mt-2 flex-wrap">
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: COLORS.planMargin }} />
+                    <span className="text-[10px] text-foreground">Plan total margin PMPY</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: COLORS.careMargin }} />
+                    <span className="text-[10px] text-foreground">Care Delivery total margin per patient</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: COLORS.integrated }} />
+                    <span className="text-[10px] text-foreground">Integrated total margin</span>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Data rows */}
             {attributionData.map((data, idx) => (
-              <div key={data.group}
-                className={`grid grid-cols-[180px_1fr_1fr_1fr] gap-0 items-center ${
-                  idx < attributionData.length - 1 ? "border-b border-border" : ""
-                }`}
-                style={{ minHeight: "140px" }}
+              <div
+                key={data.group}
+                className={`grid grid-cols-[200px_1fr_1.6fr_1.6fr] items-stretch ${idx < attributionData.length - 1 ? "border-b border-border" : ""}`}
+                style={{ minHeight: "150px" }}
               >
-                {/* Label */}
-                <div className="pr-3 py-4">
-                  <h5 className="text-sm font-bold text-foreground leading-tight">{data.group}</h5>
+                {/* Attribution group label */}
+                <div className="pr-3 py-5 flex items-center">
+                  <h5 className="text-sm font-bold text-foreground leading-snug">{data.group}</h5>
                 </div>
 
-                {/* Col 1: Avg monthly members */}
-                <div className="flex items-center gap-2 border-l border-border px-4 py-4">
-                  <div className="h-7 rounded-sm"
-                    style={{ backgroundColor: COLORS.memberBar, width: `${Math.max((data.avgMonthlyMembers / maxMembers) * 120, 20)}px` }}
+                {/* Col 1: Avg monthly members - horizontal bar */}
+                <div className="flex flex-col justify-center gap-2 border-l border-border px-4 py-4">
+                  <div className="h-6 rounded-sm"
+                    style={{ backgroundColor: COLORS.memberBar, width: `${Math.max((data.avgMonthlyMembers / maxMembers) * 100, 15)}%` }}
                   />
-                  <span className="text-sm font-medium text-foreground whitespace-nowrap">
+                  <span className="text-sm font-semibold text-foreground">
                     {formatK(data.avgMonthlyMembers)}
                   </span>
                 </div>
 
-                {/* Col 2: Stacked cost bar */}
-                <div className="flex items-center gap-1 border-l border-border px-4 py-4">
-                  <div className="h-8 flex items-center justify-center text-xs font-bold text-white rounded-l-sm"
-                    style={{ backgroundColor: COLORS.providerCost, width: `${Math.max((data.planProviderCostPMPY / maxCost) * 140, 40)}px` }}
-                  >{formatDollar(data.planProviderCostPMPY)}</div>
-                  <div className="h-8 flex items-center justify-center text-xs font-bold text-white rounded-r-sm"
-                    style={{ backgroundColor: COLORS.otherCost, width: `${Math.max((data.otherPlanCostPMPY / maxCost) * 140, 40)}px` }}
-                  >{formatDollar(data.otherPlanCostPMPY)}</div>
-                  <span className="text-xs text-muted-foreground ml-2 whitespace-nowrap">{formatDollar(data.totalCostPMPY)}</span>
+                {/* Col 2: Stacked horizontal cost bar */}
+                <div className="flex flex-col justify-center border-l border-border px-4 py-4 gap-2">
+                  <div className="flex items-stretch h-8">
+                    <div
+                      className="flex items-center justify-center text-[10px] font-bold text-white rounded-l-sm px-1"
+                      style={{ backgroundColor: COLORS.providerCost, flex: data.planProviderCostPMPY, minWidth: "36px" }}
+                    >
+                      {formatDollar(data.planProviderCostPMPY)}
+                    </div>
+                    <div
+                      className="flex items-center justify-center text-[10px] font-bold text-white rounded-r-sm px-1"
+                      style={{ backgroundColor: COLORS.otherCost, flex: data.otherPlanCostPMPY, minWidth: "36px" }}
+                    >
+                      {formatDollar(data.otherPlanCostPMPY)}
+                    </div>
+                  </div>
+                  <span className="text-xs font-medium text-muted-foreground">{formatDollar(data.totalCostPMPY)}</span>
                 </div>
 
-                {/* Col 3: Grouped margin bar chart */}
-                <div className="h-[140px] border-l border-border px-2 py-2">
+                {/* Col 3: Grouped vertical margin bars */}
+                <div className="border-l border-border px-2 py-2" style={{ minHeight: "150px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={[
-                        { name: "Plan Margin", value: data.planMarginPMPY, fill: COLORS.planMargin },
-                        { name: "Care Margin", value: data.careMarginPerPatient, fill: COLORS.careMargin },
-                        { name: "Integrated", value: data.integratedMargin, fill: COLORS.integrated },
+                        { name: "Plan", value: data.planMarginPMPY },
+                        { name: "Care", value: data.careMarginPerPatient },
+                        { name: "Integrated", value: data.integratedMargin },
                       ]}
-                      margin={{ top: 25, right: 5, bottom: 5, left: 5 }}
+                      margin={{ top: 22, right: 10, bottom: 5, left: 10 }}
                     >
-                      <XAxis dataKey="name" hide />
-                      <YAxis tick={{ fontSize: 9, fill: "var(--muted-foreground)" }} tickFormatter={formatDollarK} width={45} />
-                      <ReferenceLine y={0} stroke="var(--border)" />
-                      <Tooltip formatter={(value: number) => [formatDollar(value)]}
+                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 9, fill: "var(--muted-foreground)" }} tickFormatter={formatDollarK} width={48} axisLine={false} tickLine={false} />
+                      <ReferenceLine y={0} stroke="var(--border)" strokeWidth={1.5} />
+                      <Tooltip
+                        formatter={(value: number, name: string) => [formatDollar(value), name]}
                         contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: "6px", fontSize: "11px" }}
                       />
-                      <Bar dataKey="value" barSize={28}>
+                      <Bar dataKey="value" barSize={30} radius={[2, 2, 0, 0]}>
                         <Cell fill={COLORS.planMargin} />
                         <Cell fill={COLORS.careMargin} />
                         <Cell fill={COLORS.integrated} />
-                        <LabelList dataKey="value" position="top" formatter={formatDollarK} style={{ fontSize: 9, fill: "var(--foreground)" }} />
+                        <LabelList
+                          dataKey="value"
+                          position="top"
+                          formatter={formatDollarK}
+                          style={{ fontSize: 9, fill: "var(--foreground)", fontWeight: 600 }}
+                        />
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
