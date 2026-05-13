@@ -1766,12 +1766,12 @@ export function getIntegratedSummaryData(filters?: CentralDataFilters): Integrat
 
 
 // ── Patient-Members by Attribution ──────────────────────────────────────────
-// Groups: "Provider Group 2 attributed", "Non-Provider Group 2 attributed", "Unattributed"
+// Groups: "University of Pittsburgh Physicians", "UPMC Washington Physicians Group", "Renaissance Family Practice"
 const attributionGroupMap: Record<string, string> = {
-  "Provider Group 2": "Provider Group 2 attributed",
-  "Provider Group 1": "Other network attributed",
-  "Non-Provider Group 2": "Other network attributed",
-  "Non-Provider Group 1": "Unattributed",
+  "Provider Group 2": "University of Pittsburgh Physicians",
+  "Provider Group 1": "UPMC Washington Physicians Group",
+  "Non-Provider Group 2": "UPMC Washington Physicians Group",
+  "Non-Provider Group 1": "Renaissance Family Practice",
 }
 
 export interface PatientMembersByAttributionRow {
@@ -1839,7 +1839,7 @@ export function getPatientMembersByAttribution(filters?: CentralDataFilters): Pa
     }
   }
 
-  const groupOrder = ["Provider Group 2 attributed", "Other network attributed", "Unattributed"]
+  const groupOrder = ["University of Pittsburgh Physicians", "UPMC Washington Physicians Group", "Renaissance Family Practice"]
   return [...map.values()].sort((a, b) => {
     const gA = groupOrder.indexOf(a.attributionGroup)
     const gB = groupOrder.indexOf(b.attributionGroup)
