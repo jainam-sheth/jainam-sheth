@@ -41,14 +41,14 @@ const navSections: NavSection[] = [
         href: '/integrated-dashboards/summary',
       },
       {
-        label: 'Patient-Members by Attribution',
-        icon: Activity,
-        href: '/integrated-dashboards/patient-attribution',
-      },
-      {
         label: 'Consumer Distribution',
         icon: Users,
         href: '/integrated-dashboards/consumer-distribution',
+      },
+      {
+        label: 'Patient-Members by Attribution',
+        icon: Activity,
+        href: '/integrated-dashboards/patient-attribution',
       },
       {
         label: 'Patient-Members by LOB',
